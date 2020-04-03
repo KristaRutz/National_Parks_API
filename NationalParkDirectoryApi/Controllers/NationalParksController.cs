@@ -21,26 +21,31 @@ namespace NationalParkDirectoryApi.Controllers
 
     // GET api/nationalparks
     [HttpGet]
-    public ActionResult<IEnumerable<NationalPark>> Get(string name, string alphaCode, string stateCode, string region, string isOpen)
+    public ActionResult<IEnumerable<NationalPark>> Get(string name, string alphaCode, string stateCode, string region, string isOpen, int limit, int start)
     {
       var queryableParks = _db.NationalParks.AsQueryable();
 
+      // match any given parameters
       if (name != null)
       {
         queryableParks = queryableParks.Where(entry => entry.Name == name);
       }
+
       if (alphaCode != null)
       {
         queryableParks = queryableParks.Where(entry => entry.AlphaCode == alphaCode);
       }
+
       if (stateCode != null)
       {
         queryableParks = queryableParks.Where(entry => entry.StateCode == stateCode);
       }
+
       if (region != null)
       {
         queryableParks = queryableParks.Where(entry => entry.Region == region);
       }
+
       if (isOpen != null)
       {
         if (isOpen == "true" || isOpen == "1")
@@ -52,6 +57,17 @@ namespace NationalParkDirectoryApi.Controllers
           queryableParks = queryableParks.Where(entry => entry.IsOpen == false);
         }
       }
+
+      //limit number of results
+      const int maxLimit = 1000;
+
+      int startVal = (start > 0) ? start : 1;
+      int limitVal = 20;
+      if (limit > 0)
+      {
+        limitVal = (limit > maxLimit) ? maxLimit : limit;
+      }
+      queryableParks = queryableParks.Skip(startVal - 1).Take(limitVal);
 
       return queryableParks.ToList();
     }
