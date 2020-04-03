@@ -8,5 +8,6 @@ namespace NationalParkDirectoryApi.Models
     public string StateCode { get; set; }
     public string Region { get; set; }
     public string Url { get; set; }
+    public bool IsOpen { get; set; }
   }
 }
