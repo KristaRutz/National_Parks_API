@@ -41,16 +41,22 @@ namespace NationalParkDirectoryApi.Controllers
       _db.SaveChanges();
     }
 
-    // // PUT api/values/5
-    // [HttpPut("{id}")]
-    // public void Put(int id, [FromBody] string value)
-    // {
-    // }
+    // PUT api/nationalparks/5
+    [HttpPut("{id}")]
+    public void Put(int id, [FromBody] NationalPark park)
+    {
+      park.NationalParkId = id;
+      _db.Entry(park).State = EntityState.Modified;
+      _db.SaveChanges();
+    }
 
-    // // DELETE api/values/5
-    // [HttpDelete("{id}")]
-    // public void Delete(int id)
-    // {
-    // }
+    // DELETE api/nationalparks/5
+    [HttpDelete("{id}")]
+    public void Delete(int id)
+    {
+      var parkToDelete = _db.NationalParks.FirstOrDefault(entry => entry.NationalParkId == id);
+      _db.NationalParks.Remove(parkToDelete);
+      _db.SaveChanges();
+    }
   }
 }
