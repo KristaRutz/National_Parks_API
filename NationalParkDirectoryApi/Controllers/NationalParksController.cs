@@ -21,9 +21,39 @@ namespace NationalParkDirectoryApi.Controllers
 
     // GET api/nationalparks
     [HttpGet]
-    public ActionResult<IEnumerable<NationalPark>> Get()
+    public ActionResult<IEnumerable<NationalPark>> Get(string name, string alphaCode, string stateCode, string region, string isOpen)
     {
-      return _db.NationalParks.ToList();
+      var queryableParks = _db.NationalParks.AsQueryable();
+
+      if (name != null)
+      {
+        queryableParks = queryableParks.Where(entry => entry.Name == name);
+      }
+      if (alphaCode != null)
+      {
+        queryableParks = queryableParks.Where(entry => entry.AlphaCode == alphaCode);
+      }
+      if (stateCode != null)
+      {
+        queryableParks = queryableParks.Where(entry => entry.StateCode == stateCode);
+      }
+      if (region != null)
+      {
+        queryableParks = queryableParks.Where(entry => entry.Region == region);
+      }
+      if (isOpen != null)
+      {
+        if (isOpen == "true" || isOpen == "1")
+        {
+          queryableParks = queryableParks.Where(entry => entry.IsOpen == true);
+        }
+        else if (isOpen == "false" || isOpen == "0")
+        {
+          queryableParks = queryableParks.Where(entry => entry.IsOpen == false);
+        }
+      }
+
+      return queryableParks.ToList();
     }
 
     // GET api/nationalparks/5
