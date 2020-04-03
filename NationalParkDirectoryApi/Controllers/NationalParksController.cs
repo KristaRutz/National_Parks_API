@@ -26,12 +26,12 @@ namespace NationalParkDirectoryApi.Controllers
       return _db.NationalParks.ToList();
     }
 
-    // // GET api/nationalparks/5
-    // [HttpGet("{id}")]
-    // public ActionResult<string> Get(int id)
-    // {
-    //   return "value";
-    // }
+    // GET api/nationalparks/5
+    [HttpGet("{id}")]
+    public ActionResult<NationalPark> Get(int id)
+    {
+      return _db.NationalParks.FirstOrDefault(entry => entry.NationalParkId == id);
+    }
 
     // POST api/nationalparks
     [HttpPost]
