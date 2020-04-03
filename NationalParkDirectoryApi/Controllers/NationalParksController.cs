@@ -19,9 +19,9 @@ namespace NationalParkDirectoryApi.Controllers
 
     // GET api/nationalparks
     [HttpGet]
-    public ActionResult<IEnumerable<string>> Get()
+    public ActionResult<IEnumerable<NationalPark>> Get()
     {
-      return new string[] { "value1", "value2" };
+      return _db.NationalParks.ToList();
     }
 
     // // GET api/nationalparks/5
@@ -33,8 +33,10 @@ namespace NationalParkDirectoryApi.Controllers
 
     // POST api/nationalparks
     [HttpPost]
-    public void Post([FromBody] string value)
+    public void Post([FromBody] NationalPark park)
     {
+      _db.NationalParks.Add(park);
+      _db.SaveChanges();
     }
 
     // // PUT api/values/5
