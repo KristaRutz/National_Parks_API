@@ -4,14 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NationalParkDirectoryApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace NationalParkDirectoryApi.Controllers
 {
-  [Route("api/1.0/[controller]")]
+  [Route("api/[controller]")]
   [ApiController]
   public class NationalParksController : ControllerBase
   {
     private NationalParkDirectoryApiContext _db;
+
     public NationalParksController(NationalParkDirectoryApiContext db)
     {
       _db = db;
