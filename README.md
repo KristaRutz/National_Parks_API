@@ -40,14 +40,13 @@ _This program also makes use of SQL databases. We recommend using MySQL Workbenc
 - Download or clone this repo.
   - **To Download ZIP:**
     - Select "Download" on the [GitHub Repository](https://github.com/KristaRutz/Week-13-Building-an-API-C-Sharp) site
-    - Once downloaded, open the ZIP and extract files. The new folder will be created as 'Week-12-Advanced-Databases-and-Authentication-Project'.
+    - Once downloaded, open the ZIP and extract files. The new folder will be created as 'Week-13-Building-an-API-C-Sharp'.
   - **To Clone:**
     - Clone from command line into your Desktop: \$ `git clone https://github.com/KristaRutz/Week-13-Building-an-API-C-Sharp`
     - The new directory will be created as 'Desktop/Week-12-Advanced-Databases-and-Authentication-Project'.
 - Once you have stored the files locally, execute the following commands.
-  - Navigate to the application directory: \$ `cd Desktop/Week-12-Advanced-Databases-and-Authentication-Project/BookClub`
+  - Navigate to the application directory: \$ `cd Desktop/Week-13-Building-an-API-C-Sharp/NationalParkDirectoryApi`
   - \$ `dotnet restore`
-  - \$ `dotnet ef migrations add Initial`
   - \$ `dotnet ef database update`
   - \$ `dotnet build`
   - \$ `dotnet run`

@@ -6,6 +6,18 @@
 
 Welcome to the National Park Directory API! Use this API to access information about National Parks in the United States and update park closure information in light of the federal social distancing recommendations, which have affected park openings in many states.
 
+## Request Overview
+
+Use the links in the table under the "Request" header to view more detailed information about how to format requests and specify parameters to customize results.
+
+| Request                                       | Request Type | Route Endpoints                                            |
+| :-------------------------------------------- | :----------- | :--------------------------------------------------------- |
+| [National park search](#national-park-search) | GET          | `http://localhost:5000/api/nationalparks`                  |
+| [Retrieve one park](#Retrieve-one-park)       | GET          | `http://localhost:5000/api/nationalparks/{NationalParkId}` |
+| [Add a park](#add-a-park)                     | POST         | `http://localhost:5000/api/nationalparks`                  |
+| [Edit a park](#edit-a-park)                   | PUT          | `http://localhost:5000/api/nationalparks/{NationalParkId}` |
+| [Remove a park](#remove-a-park)               | DELETE       | `http://localhost:5000/api/nationalparks/{NationalParkId}` |
+
 ## About the data
 
 Data is available in JSON format.
@@ -69,19 +81,23 @@ National park entries contain fields for the park name, the park code written in
   </tr>
 </table>
 
-## Request Overview
-
-Use the links in the table under the "Request" header to view more detailed information about how to format requests and specify parameters to customize results.
-
-| Request                                       | Request Type | Route endpoints                                            |
-| :-------------------------------------------- | :----------- | :--------------------------------------------------------- |
-| [National park search](#national-park-search) | GET          | `http://localhost:5000/api/nationalparks`                  |
-| [Retrieve one park](#Retrieve-one-park)       | GET          | `http://localhost:5000/api/nationalparks/{NationalParkId}` |
-| [Add a park](#add-a-park)                     | POST         | `http://localhost:5000/api/nationalparks`                  |
-| [Edit a park](#edit-a-park)                   | PUT          | `http://localhost:5000/api/nationalparks/{NationalParkId}` |
-| [Remove a park](#remove-a-park)               | DELETE       | `http://localhost:5000/api/nationalparks/{NationalParkId}` |
+# GET requests
 
 ## National park search
+
+Request type: GET
+
+Search for a list of national parks, and use parameters to customize your results. Valid parameters include `name`, `alphacode`, `statecode`, `region`, `isopen`, `limit`, and `start`.
+
+### Retrieve All
+
+When seeking a list of all available park data, simply submit a GET request with no parameters. See the [pagination](#pagination) section if you wish to get more than the default number of results.
+
+```
+http://localhost:5000/api/
+```
+
+### Filtering Results
 
 ### Pagination
 
@@ -89,7 +105,40 @@ The National Park Directory API returns a default of 20 results at a time, and a
 
 ### Retrieve one park
 
+Use this type of request to pull a single park based on the park's `nationalParkId`. This GET request cannot be used with query parameters, as it always returns a single park (or nothing, if no parks match the given ID).
+
+```
+http://localhost:5000/api/{nationalParkId}
+```
+
+# All other requests
+
+Be very careful when adding or changing information in the database. The following request types modify the underlying data, and cannot be reversed.
+
+The POST, PUT, and DELETE requests follow the following route format:
+
+```
+http://localhost:5000/api/{nationalParkId}
+```
+
+#### Request Format
+
+Format POST and ADD request content as JSON objects in the request body.
+
+**Error Codes** The API will throw a 400 Bad Request error if the `alphaCode` exceeds 4 characters or if the `stateCode` exceeds 2 characters.
+
 ## Add a park
+
+```
+{
+    "name": "National Park of American Samoa",
+    "alphacode": "NPSA",
+    "statecode": "AS",
+    "region": "Pacific-West",
+    "url": "https://www.nps.gov/npsa/index.htm",
+    "isopen": 1
+}
+```
 
 ## Edit a park
 
