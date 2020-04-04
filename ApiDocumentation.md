@@ -81,53 +81,207 @@ National park entries contain fields for the park name, the park code written in
   </tr>
 </table>
 
+<br>
+<br>
+
 # GET requests
+
+Search for national parks, and use parameters to customize your results. Valid parameters include `name`, `alphacode`, `statecode`, `region`, `isopen`, `limit`, and `start`.
 
 ## National park search
 
-Request type: GET
-
-Search for a list of national parks, and use parameters to customize your results. Valid parameters include `name`, `alphacode`, `statecode`, `region`, `isopen`, `limit`, and `start`.
+Use this endpoint to find a list of all results, or all matching a query. Make a GET request for all parks matching a query, adjusting for pagination preferences, by adding parameters in the format of `?` + `{parameter-name}={search-term}`, separated by `&`, to the standard route format. Each query parameter is optional, and any combination of parameters can be used.
 
 ### Retrieve All
 
-When seeking a list of all available park data, simply submit a GET request with no parameters. See the [pagination](#pagination) section if you wish to get more than the default number of results.
+A GET request for all parks follows the following route format:
 
 ```
-http://localhost:5000/api/
+http://localhost:5000/api/nationalparks/
 ```
+
+When seeking a list of all available park data, simply submit a GET request with **no** parameters. _Note: The default result is set to 20 parks. See the [pagination](#pagination) section if you wish to get more than the default number of results._
 
 ### Filtering Results
 
+A GET request for all parks matching a query requires parameters in the format of `?` + `{parameter-name}={search-term}`, separated by `&`, to the standard route format. Each query parameter is optional, and any combination of parameters can be used. Null entries for string parameters will not result in errors. as shown here:.
+
+```
+http://localhost:5000/api/nationalparks/?name=&alphaCode=&stateCode=&region=&isopen=
+```
+
+The five string query parameters are `name`, `alphacode`, `statecode`, `region`, and `isopen`. See the [parsing the data](#parsing-the-data) section for more information on these fields.
+
+- Format spaces using standard URL encoding, with `+` or `%20`.
+- Queries are not case sensitive.
+- Queries are not ordered, and can appear in any order.
+- Special type `isOpen` can be queried as a `true` or `false` string or as `1` (for true) and `0` (for false).
+
+<details>
+  <summary>Example GET all with query parameters</summary>
+
+```
+http://localhost:5000/api/nationalparks/?name=&alphaCode=&stateCode=CA&region=
+```
+
+or
+
+```
+http://localhost:5000/api/nationalparks/?stateCode=CA
+```
+
+Body:
+
+```
+[
+  {
+    "nationalParkId": 12,
+    "name": "Channel Islands National Park",
+    "alphaCode": "CHIS",
+    "stateCode": "CA",
+    "region": "Pacific-West",
+    "url": "https://www.nps.gov/chis/index.htm",
+    "isOpen": true
+  },
+  {
+    "nationalParkId": 16,
+    "name": "Death Valley National Park",
+    "alphaCode": "DEVA",
+    "stateCode": "CA",
+    "region": "Pacific-West",
+    "url": "https://www.nps.gov/deva/index.htm",
+    "isOpen": true
+  }
+]
+```
+
+</details>
+
 ### Pagination
 
-The National Park Directory API returns a default of 20 results at a time, and a maximum of 1000. Use the `limit` and `start` query parameters to change the results given. The `limit` specifies how many requests
+The National Park Directory API returns a default of 20 results at a time, and a maximum of 1000. Use the `limit` and `start` query parameters to change the results given. The `limit` specifies how many results should be returned, and the `start` parameter indicates at which element in the set the limit should start counting.
 
-### Retrieve one park
+Make a GET request for all parks matching a query, adjusting for pagination preferences, by adding parameters in the format of `?` + `{parameter-name}={search-term}`, separated by `&`, to the standard route format. Each query parameter is optional, and any combination of parameters can be used.
+
+Null int entries WILL result in errors. To use defaults, don't include `limit` and `start` or set them equal to zero.
+
+<details>
+  <summary>Examples using default values</summary>
+
+In this example, limit is left blank and therefore set to default (which is 20), and only start is changed.
+
+```
+
+http://localhost:5000/api/nationalparks/?start=3
+
+```
+
+Setting limit to 0 accomplishes the same thing. In this example, limit is set to default 20, and only start is changed.
+
+```
+
+http://localhost:5000/api/nationalparks/?limit=0&start=3
+
+```
+
+</details>
+<details>
+  <summary>Example using custom limit and start</summary>
+
+Setting limit to 12 and start to 1 will return entry 1-12 in the parks database. Setting limit to 12 and start to 13 (or 1+limit) will return entry 13-24. This is a convenient way to paginate results with a desired limit.
+
+```
+
+http://localhost:5000/api/nationalparks/?limit=12&start=13
+
+```
+
+</details>
+<details>
+  <summary>Example combining pagination with queries</summary>
+
+Each query parameter is optional, and any combination of parameters can be used, including both string queries and pagination values.
+
+```
+
+http://localhost:5000/api/nationalparks/?region=intermountain&limit=10
+
+```
+
+This will return the first 10 parks in the Intermountain region.
+
+</details>
+
+## Retrieve one park
+
+A GET request for an individual park follows the following route format:
+
+```
+
+http://localhost:5000/api/nationalparks/{nationalParkId}
+
+```
 
 Use this type of request to pull a single park based on the park's `nationalParkId`. This GET request cannot be used with query parameters, as it always returns a single park (or nothing, if no parks match the given ID).
 
+<details>
+  <summary>Example GET by ID</summary>
+
 ```
-http://localhost:5000/api/{nationalParkId}
+http://localhost:5000/api/nationalparks/2
 ```
+
+Body:
+
+```
+{
+    "nationalParkId": 2,
+    "name": "National Park of American Samoa",
+    "alphaCode": "NPSA",
+    "stateCode": "AS",
+    "region": "Pacific-West",
+    "url": "https://www.nps.gov/npsa/index.htm",
+    "isOpen": true
+}
+```
+
+</details>
+
+<br>
+<br>
 
 # All other requests
 
-Be very careful when adding or changing information in the database. The following request types modify the underlying data, and cannot be reversed.
-
-The POST, PUT, and DELETE requests follow the following route format:
-
-```
-http://localhost:5000/api/{nationalParkId}
-```
+Be very careful when adding or changing information in the database. The following request types modify the underlying data, and cannot be reversed. Requests returning a 200 OK status have successfully posted.
 
 #### Request Format
 
-Format POST and ADD request content as JSON objects in the request body.
+Format POST and PUT request content as JSON objects in the request body. Include the ID of the entry for PUT and DELETE requests.
 
-**Error Codes** The API will throw a 400 Bad Request error if the `alphaCode` exceeds 4 characters or if the `stateCode` exceeds 2 characters.
+**Error Codes:** The API will throw a 400 Bad Request error if the `alphaCode` exceeds 4 characters or if the `stateCode` exceeds 2 characters.
 
 ## Add a park
+
+A PUT request follows the following route format:
+
+```
+
+http://localhost:5000/api/nationalparks/
+
+```
+
+Specify `name`, `alphacode`, `statecode`, `region`, `url`, and `isopen`. Do not specify a `nationalParkId`, as this will be automatically generated based on the historic number of entries in the database.
+
+_Note: The `isOpen` value may be assigned as a true/false or 1/0 value._
+
+<details>
+  <summary>Example POST</summary>
+
+```
+http://localhost:5000/api/nationalparks/
+```
+
+Body:
 
 ```
 {
@@ -136,10 +290,69 @@ Format POST and ADD request content as JSON objects in the request body.
     "statecode": "AS",
     "region": "Pacific-West",
     "url": "https://www.nps.gov/npsa/index.htm",
-    "isopen": 1
+    "isopen": true
 }
 ```
 
+</details>
+
 ## Edit a park
 
+A PUT request follows the following route format:
+
+```
+
+http://localhost:5000/api/nationalparks/{nationalParkId}
+
+```
+
+Currently, this API supports PUT requests but not PATCH requests. Therefore, the body must be formatted the same way as a POST request to add a new park. All fields not included, even if they are not the field to be modified, will be overwritten as `null`.
+
+<details>
+  <summary>Example PUT</summary>
+
+```
+
+http://localhost:5000/api/nationalparks/6
+
+```
+
+Body:
+
+```
+
+{
+"name": "Biscayne National Park",
+"alphaCode": "BISC",
+"stateCode": "FL",
+"region": "Southeast",
+"url": "https://www.nps.gov/bisc/index.htm",
+"isOpen": true
+}
+
+```
+
+</details>
+
 ## Remove a park
+
+A DELETE request follows the following route format:
+
+```
+
+http://localhost:5000/api/nationalparks/{nationalParkId}
+
+```
+
+Submitting a DELETE request will delete the park with the matching ID.
+
+<details>
+  <summary>Example DELETE</summary>
+
+```
+
+http://localhost:5000/api/nationalparks/8
+
+```
+
+</details>
