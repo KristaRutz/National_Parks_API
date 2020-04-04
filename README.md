@@ -31,6 +31,8 @@ It was created for the Epicodus week 13 friday independent project, on week 6 of
 
 ## Installation / Set-up
 
+**This API is fully documented.** Find usage and explanations in [The API Documentation document](/ApiDocumentation.md).
+
 Download or clone the repository to run this program locally!
 
 _This program requires .NET Core SDK to run. [Here is a free tutorial](https://www.learnhowtoprogram.com/c-and-net/getting-started-with-c/installing-c-and-net) for installing .NET on Mac or Windows 10._
@@ -74,11 +76,11 @@ Your code will be reviewed for the following objectives:
 
 - [x] Application includes CRUD functionality and successfully returns responses to API calls.
 
-- [ ] Application includes at least one of the further exploration objectives: authentication, versioning, pagination, Swagger documentation, or CORS.
+- [x] Application includes at least one of the further exploration objectives: authentication, versioning, pagination, Swagger documentation, or CORS.
 
-- [ ] Application is well-documented, including specific documentation on further exploration.
+- [x] Application is well-documented, including specific documentation on further exploration.
 
-- [ ] Commit history clearly shows eight hours of work.
+- [x] Commit history clearly shows eight hours of work.
 
 <!-- <details>
   <summary>Expand specs for this project</summary>
